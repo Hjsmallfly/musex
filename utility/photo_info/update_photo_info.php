@@ -11,10 +11,6 @@ require_once("photo_file_scanner.php");
 require_once("PhotoInfo.class.php");
 require_once("../database/database_operations.php");
 
-
-
-
-
 function update_info($root){
     global $db;
     $info_files = scan_info_files($root);
@@ -56,6 +52,7 @@ function update_info($root){
         foreach($tag_list as $tag){
             $tag_id_list[] = insert_tag($tag);
         }
+        echo "处理照片: " . $filename . "<br>";
         // 添加照片信息到数据库
         insert_photo($filename, $thumbnail_filename, $model_id, $title,
             $photographer, $model, $timestamp, $location, $ratio, $tag_id_list);

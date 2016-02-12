@@ -122,3 +122,62 @@ function insert_photo($filename, $thumbnail_filename, $model_id,
     }
 
 }
+
+function find_user($username){
+    global $db;
+    $stmt = $db->prepare("SELECT id FROM Users WHERE username=:username LIMIT 1");
+    $stmt->bindParam(":username", $username);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result)
+        return intval($result["id"]);
+    return false;
+}
+
+function insert_user($username, $nickname=null, $password_hash=null, $phone=null, $email=null){
+    global $db;
+    $user_id = find_user($username);
+    if ($user_id)
+        return $user_id;
+    $stmt = $db->prepare("INSERT INTO Users (username, nickname, password_hash, phone, email)
+                                    VALUES (:username, :nickname, :password_hash, :phone, :email)");
+    try {
+        $stmt->execute([$username, $nickname, $password_hash, $phone, $email]);
+        return $db->lastInsertId();
+    }catch (PDOException $e){
+        error_log("ERROR while insert user: " . $e->getMessage());
+        return false;
+    }
+
+}
+
+function get_photo_favour($p_id){
+    global $db;
+    $stmt = $db->prepare("SELECT COUNT(*) AS favour_count FROM PhotoFavours WHERE photo_id=:p_id ");
+    $stmt->execute([$p_id]);
+    $count = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($count)
+        return $count["favour_count"];
+    return 0;
+}
+
+function favour_photo($p_id, $username, $token=null){
+    // 以后添加不允许重复投票的机制
+    // ------------------------
+    global $db;
+    $u_id = insert_user($username);
+    $stmt = $db->prepare("INSERT INTO PhotoFavours (photo_id, user_id) VALUES (:p_id, :u_id)");
+    try{
+        $stmt->execute([$p_id, $u_id]);
+        // 返回赞的数量
+        $favour_count = get_photo_favour($p_id);
+        // 更新Photos里面的赞数量
+        $db->exec("UPDATE Photos SET favour_count=$favour_count WHERE id=$p_id");
+        return $favour_count;
+
+    }catch (PDOException $e){
+        error_log("ERROR while favour: " . $e->getMessage());
+        return false;
+    }
+
+}
