@@ -10,8 +10,9 @@ require_once("db_creator.php");
 require_once("dbConfig.php");
 if ($db){
     try{
-        $db->exec($photo_table_sql);
-        $db->exec($model_table_sql);
+        foreach($ALL_TABLES as $table){
+            $db->exec($table);
+        }
         echo "数据库建立完毕" . "<br>";
         $db = null;
     }catch (PDOException $e){
