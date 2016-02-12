@@ -15,6 +15,12 @@ class PhotoInfo{
     private $location;
     private $tags;
     private $ratio;
+    private $filename;
+    private $thumbnail_filename;
+
+
+
+
 
     static $TAG_SEPARATOR = "+";
 
@@ -37,6 +43,8 @@ class PhotoInfo{
         $this->location = $info_obj["Location"];
         $this->tags = $this->decode_tags($info_obj["Tags"]);
         $this->ratio = $info_obj["Ratio"];
+        $this->filename = $info_obj["filename"];
+        $this->thumbnail_filename = $info_obj["thumbnail_filename"];
     }
 
     // json_decode 函数不能解码 WITH_BOM 的字符串
@@ -56,11 +64,13 @@ class PhotoInfo{
     public function getLocation(){return $this->location;}
     public function getTags(){return $this->tags;}
     public function getRatio(){return $this->ratio;}
+    public function getFilename(){return $this->filename;}
+    public function getThumbnailFilename(){return $this->thumbnail_filename;}
     // getters
 
     public function get_info(){
         return [$this->title, $this->photographer, $this->model, $this->time,
-        $this->location, $this->tags, $this->ratio];
+        $this->location, $this->tags, $this->ratio, $this->filename, $this->thumbnail_filename];
     }
 
     private function decode_time($time_str){

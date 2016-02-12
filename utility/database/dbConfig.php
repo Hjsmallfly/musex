@@ -15,7 +15,8 @@ $photo_table_sql = "
     CREATE TABLE IF NOT EXISTS Photos(
       id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
       model_id INT NOT NULL,  # 外键
-      path VARCHAR(128) CHARACTER SET utf8 NOT NULL UNIQUE,  # 不应该重复 VARCHAR 字段长度貌似有些限制
+      filename VARCHAR(128) CHARACTER SET utf8 NOT NULL UNIQUE,  # 不应该重复 VARCHAR 字段长度貌似有些限制
+      thumbnail_file VARCHAR(128) CHARACTER SET utf8 NOT NULL UNIQUE, # 缩略图文件
       title VARCHAR(40) CHARACTER SET utf8,
       photographer VARCHAR(20) CHARACTER SET utf8,  # 以名字区分
       model VARCHAR(20) CHARACTER SET utf8,         # 模特名
@@ -31,7 +32,7 @@ $photo_table_sql = "
 $model_table_sql = "
     CREATE TABLE IF NOT EXISTS Models(
       id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-      name VARCHAR(20) CHARACTER SET utf8,
+      name VARCHAR(20) CHARACTER SET utf8 UNIQUE,
       favour_count INT DEFAULT 0, # 赞的数量
       wechat VARCHAR(20) CHARACTER SET utf8,
       qq VARCHAR(20) CHARACTER SET utf8,
@@ -44,7 +45,7 @@ $model_table_sql = "
 $tag_table_sql = "
   CREATE TABLE IF NOT EXISTS Tags(  # tag 与照片是多对多的关系
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    tag VARCHAR(20) CHARACTER SET utf8  # tag的名称
+    tag VARCHAR(20) CHARACTER SET utf8 UNIQUE  # tag的名称
   )
 ";
 
