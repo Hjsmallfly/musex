@@ -18,10 +18,6 @@ class PhotoInfo{
     private $filename;
     private $thumbnail_filename;
 
-
-
-
-
     static $TAG_SEPARATOR = "+";
 
     public function __construct($json_str){
