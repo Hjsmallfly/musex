@@ -23,7 +23,8 @@ $photo_table_sql = "
       moment TIMESTAMP DEFAULT 0,                   # 照片拍摄日期
       location VARCHAR(40) CHARACTER SET utf8,
       favour_count INT DEFAULT 0,                   # 点赞数
-      ratio VARCHAR(10) CHARACTER SET utf8,          # 照片的分辨率
+      ratio VARCHAR(10) CHARACTER SET utf8,         # 照片的分辨率
+      tags VARCHAR(50) CHARACTER SET utf8,          # 照片的tags, 用于方便提取照片的tag, 用+号分割
       # model_id 是外键
       FOREIGN KEY (model_id) REFERENCES Models(id)
     )

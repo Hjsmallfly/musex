@@ -12,7 +12,6 @@ require_once("PhotoInfo.class.php");
 require_once("../database/database_operations.php");
 
 function update_info($root){
-    global $db;
     $info_files = scan_info_files($root);
     $photo_files = generate_photo_files($info_files);
     $thumbnail_files = generate_thumbnail_files($info_files);
@@ -41,6 +40,8 @@ function update_info($root){
         $timestamp = $photoInfoObj->getTime();
         $location = $photoInfoObj->getLocation();
         $tag_list = $photoInfoObj->getTags();
+        // 保存一份tag_str到数据库中
+        $tag_json = json_encode($tag_list);
         $ratio = $photoInfoObj->getRatio();
         $filename = $photoInfoObj->getFilename();
         $thumbnail_filename = $photoInfoObj->getThumbnailFilename();
@@ -55,7 +56,7 @@ function update_info($root){
         echo "处理照片: " . $filename . "<br>";
         // 添加照片信息到数据库
         insert_photo($filename, $thumbnail_filename, $model_id, $title,
-            $photographer, $model, $timestamp, $location, $ratio, $tag_id_list);
+            $photographer, $model, $timestamp, $location, $ratio, $tag_id_list, $tag_json);
 
     }
 }

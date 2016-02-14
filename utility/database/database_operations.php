@@ -82,16 +82,16 @@ function find_photo($filename){
 }
 
 function insert_photo($filename, $thumbnail_filename, $model_id,
-                      $title, $photographer, $model_name, $moment, $location, $ratio, $tag_id_list){
+                      $title, $photographer, $model_name, $moment, $location, $ratio, $tag_id_list, $tag_str){
     global $db;
     $p_id = find_photo($filename);
     if ($p_id)
         return $p_id;
     // TIMESTAMP 是个字符串类型来着,所以如果传入的数据是时间戳的话,需要加上 FROM_UNIXTIME(:time_var)
     $stmt = $db->prepare("INSERT INTO Photos (filename, thumbnail_file, model_id,
-                        title, photographer, model, moment, location, ratio) VALUES(:filename,
+                        title, photographer, model, moment, location, ratio, tags) VALUES(:filename,
                         :thumbnail_file, :model_id, :title, :photographer, :model, FROM_UNIXTIME(:moment),
-                        :location, :ratio)");
+                        :location, :ratio, :tags)");
 
     $stmt->bindParam(":filename", $filename);
     $stmt->bindParam(":thumbnail_file", $thumbnail_filename);
@@ -103,6 +103,7 @@ function insert_photo($filename, $thumbnail_filename, $model_id,
 //    error_log($moment);
     $stmt->bindParam(":location", $location);
     $stmt->bindParam(":ratio", $ratio);
+    $stmt->bindParam(":tags", $tag_str);
 
     try{
         $stmt->execute();
@@ -180,4 +181,18 @@ function favour_photo($p_id, $username, $token=null){
         return false;
     }
 
+}
+
+function get_photo_by_tag($tag_id){
+    global $db;
+    $stmt = $db->prepare("SELECT * FROM Photos WHERE id IN (SELECT photo_id FROM Photo_Tag_Associ WHERE tag_id=:tag_id);");
+    $stmt->bindParam(":tag_id", $tag_id, PDO::PARAM_INT);
+    try{
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return json_encode($result, JSON_UNESCAPED_SLASHES);
+    }catch (PDOException $e){
+        error_log("ERROR WHILE get photo_by_tags: " . $e->getMessage());
+        return json_encode(array("ERROR"=>"ERROR WHILE get photo_by_tags: " . $e->getMessage()));
+    }
 }

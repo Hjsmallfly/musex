@@ -12,13 +12,13 @@ require_once("../database/database_operations.php");
 /*
  * api:
  * 方法: get
- * 参数: count 最新的 count 张照片 默认是10张
+ * 参数: count 最新的 count 张照片 默认是10张, 负数表示全部照片
  */
 
 // 参数检查
 if(!isset($_GET["count"])){
     get_latest_photos(10);
-}elseif($_GET["count"] <= 0){
+}elseif($_GET["count"] == 0){
     echo json_encode(array("ERROR" => "count must be grater than zero"));
     return;
 }else
@@ -26,9 +26,12 @@ if(!isset($_GET["count"])){
 
 function get_latest_photos($count){
     global $db;
-//    $count = $_GET["count"];
-    $stmt = $db->prepare("SELECT * from Photos ORDER BY moment DESC LIMIT :count");
-    $stmt->bindParam(":count", $count, PDO::PARAM_INT);
+    if ($count > 0) {
+        $stmt = $db->prepare("SELECT * from Photos ORDER BY moment DESC LIMIT :count");
+        $stmt->bindParam(":count", $count, PDO::PARAM_INT);
+    }
+    else
+        $stmt = $db->prepare("SELECT * from Photos ORDER BY moment DESC");
     try{
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

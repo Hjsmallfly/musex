@@ -7,6 +7,7 @@
  * Time: 下午10:31
  */
 
+
 class PhotoInfo{
     private $title;
     private $photographer;
