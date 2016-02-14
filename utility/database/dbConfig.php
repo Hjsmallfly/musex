@@ -26,7 +26,9 @@ $photo_table_sql = "
       ratio VARCHAR(10) CHARACTER SET utf8,         # 照片的分辨率
       tags VARCHAR(50) CHARACTER SET utf8,          # 照片的tags, 用于方便提取照片的tag, 用+号分割
       # model_id 是外键
-      FOREIGN KEY (model_id) REFERENCES Models(id)
+      FOREIGN KEY (model_id) REFERENCES Models(id),
+      # 添加index到moment上去(对年份建立检索)
+      INDEX moment_index (moment(4))
     )
 ";
 

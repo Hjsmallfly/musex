@@ -14,7 +14,7 @@ if ($db){
             $db->exec($table);
         }
         echo "数据库建立完毕" . "<br>";
-        $db = null;
+//        $db = null;
     }catch (PDOException $e){
         echo json_encode(array("ERROR" => $e->getMessage()));
         error_log($e->getMessage());

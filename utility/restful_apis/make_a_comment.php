@@ -13,7 +13,7 @@
  * photo_id 照片的id
  * username 用户名
  * content  评论内容
- * 测试:curl "http://localhost:63342/hello_php/musex/utiis/make_a_comment.php" -d "photo_id=1&content=helloworld"
+ * 测试:curl "http://localhost:63342/hello_php/musex/utility/restful_apis/make_a_comment.php" -d "photo_id=1&content=helloworld"
  */
 
 define("CONTENT_MAX_LENGTH", 140);

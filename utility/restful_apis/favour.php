@@ -5,7 +5,6 @@
  * Date: 16-2-12
  * Time: 下午3:16
  * [赞]功能
- * 测试 curl "http://localhost:63342/hello_php/musex/utility/restful_apis/favour.php" -d "photo_id=7"
  */
 
 /*
@@ -14,6 +13,7 @@
  * 参数:
  *      photo_id 照片在数据库中的id
  *      username 点赞的用户名[暂时用ip]
+ * * 测试 curl "http://localhost:63342/hello_php/musex/utility/restful_apis/favour.php" -d "photo_id=1"
  */
 
 // 参数检查

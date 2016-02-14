@@ -25,11 +25,12 @@ require_once("../database/database_operations.php");
 get_photos_by_year($_GET["year"]);
 
 function get_photos_by_year($year){
-    if (!is_int(intval($year))){
+    if (!is_numeric(($year))){
         echo json_encode(["ERROR"=>"year must be int"]);
         return;
     }
     global $db;
+    // 貌似用 YEAR() 的话会影响index的使用, 所以如果性能出现瓶颈可以考虑试试 WHERE moment > "2015-01-01" 之类的语句
     $stmt = $db->prepare("SELECT * FROM Photos WHERE YEAR(moment)=:year ORDER BY moment DESC");
     $stmt->bindParam(":year", $year);
     try{

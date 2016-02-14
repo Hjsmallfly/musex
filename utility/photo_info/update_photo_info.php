@@ -11,8 +11,15 @@ require_once("photo_file_scanner.php");
 require_once("PhotoInfo.class.php");
 require_once("../database/database_operations.php");
 
+define("PHOTO_PATH_FILE", "photo_path.txt");
+define("DEFAULT_PATH", "../../photos");
+
 function update_info($root){
     $info_files = scan_info_files($root);
+    if (!$info_files){
+        echo json_encode(["ERROR" => $root . " has no resources"]);
+        return;
+    }
     $photo_files = generate_photo_files($info_files);
     $thumbnail_files = generate_thumbnail_files($info_files);
     if (!$info_files)
@@ -61,5 +68,13 @@ function update_info($root){
     }
 }
 
-update_info("../../photos");
+function get_photo_path(){
+    if (file_exists(PHOTO_PATH_FILE))
+        return file_get_contents(PHOTO_PATH_FILE);
+    return DEFAULT_PATH;
+}
+
+$photo_path = get_photo_path();
+echo "the photo path is " . $photo_path . "<br>";
+update_info($photo_path);
 
