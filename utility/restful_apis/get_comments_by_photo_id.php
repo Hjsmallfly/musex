@@ -28,7 +28,7 @@ function get_comments($photo_id){
         return;
     }
     global $db;
-    $stmt = $db->prepare("SELECT * FROM Comments WHERE photo_id=:pid");
+    $stmt = $db->prepare("SELECT * FROM Comments WHERE photo_id=:pid ORDER BY comment_time DESC");
     $stmt->bindParam(":pid", $photo_id, PDO::PARAM_INT);
     try{
         $stmt->execute();

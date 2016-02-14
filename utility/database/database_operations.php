@@ -185,7 +185,7 @@ function favour_photo($p_id, $username, $token=null){
 
 function get_photo_by_tag($tag_id){
     global $db;
-    $stmt = $db->prepare("SELECT * FROM Photos WHERE id IN (SELECT photo_id FROM Photo_Tag_Associ WHERE tag_id=:tag_id);");
+    $stmt = $db->prepare("SELECT * FROM Photos WHERE id IN (SELECT photo_id FROM Photo_Tag_Associ WHERE tag_id=:tag_id) ORDER BY moment DESC");
     $stmt->bindParam(":tag_id", $tag_id, PDO::PARAM_INT);
     try{
         $stmt->execute();

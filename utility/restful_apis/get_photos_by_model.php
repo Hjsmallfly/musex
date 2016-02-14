@@ -32,7 +32,7 @@ function get_photos_by_model($model_id){
     }
 
     global $db;
-    $stmt = $db->prepare("SELECT * FROM Photos WHERE model_id=:model_id");
+    $stmt = $db->prepare("SELECT * FROM Photos WHERE model_id=:model_id ORDER BY moment DESC");
     $stmt->bindParam(":model_id", $model_id, PDO::PARAM_INT);
     try{
         $stmt->execute();
