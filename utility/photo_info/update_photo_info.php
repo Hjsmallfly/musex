@@ -17,8 +17,8 @@ define("DEFAULT_PATH", "../../photos");
 function update_info($root){
     $info_files = scan_info_files($root);
     if (!$info_files){
-        echo json_encode(["ERROR" => $root . " has no resources"]);
-        return;
+        echo json_encode(["ERROR" => $root . " has no resources"], JSON_UNESCAPED_SLASHES);
+        return false;
     }
     $photo_files = generate_photo_files($info_files);
     $thumbnail_files = generate_thumbnail_files($info_files);
@@ -69,8 +69,9 @@ function update_info($root){
 }
 
 function get_photo_path(){
-    if (file_exists(PHOTO_PATH_FILE))
-        return file_get_contents(PHOTO_PATH_FILE);
+    $file_path = __DIR__ . DIRECTORY_SEPARATOR . PHOTO_PATH_FILE;
+    if (file_exists($file_path))
+        return file_get_contents($file_path);
     return DEFAULT_PATH;
 }
 
